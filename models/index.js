@@ -5,7 +5,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const config = require('../config/config')
-const debug = require('debug')('model:index')
+const debug = require('debug')('app:model-index')
 
 const db = {}
 
