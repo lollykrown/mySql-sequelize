@@ -34,8 +34,8 @@ module.exports = (sequelize, Datatypes) => {
         len: [7, 100],
         isEmail: true
       },
-      updated_at: { type: Datatypes.DATETIME },
-      deleted_at: { type: Datatypes.DATETIME }
+      updated_at: { type: Datatypes.DATE },
+      deleted_at: { type: Datatypes.DATE }
   },{
     underscore: true,
     paranoid: true
