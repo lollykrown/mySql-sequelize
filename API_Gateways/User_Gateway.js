@@ -52,12 +52,7 @@ router.post('/', asyncHandler(async (req, res) => {
             email: true,
         },
     };
-    const { first_name } = req.body;
-    const { last_name } = req.body;
-    const { username } = req.body;
-    const { password } = req.body;
-    const { email } = req.body;
-    const { permission_id } = req.body;
+    const { first_name, last_name, username, password, email, permission_id } = req.body;
 
     const validation = validate({
         first_name, last_name, username, password, email,
