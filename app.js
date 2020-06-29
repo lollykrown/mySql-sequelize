@@ -3,9 +3,20 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const config = require('./config/config');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+// MySql Store setup
+const options = {
+  host: config.db.host,
+  port: 3306,
+  user: config.db.username,
+  password: config.db.password,
+  database: config.db.database,
+};
+const sessionStore = new MySQLStore(options);
 
 const app = express();
 
