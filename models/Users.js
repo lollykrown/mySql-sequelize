@@ -1,7 +1,7 @@
 module.exports = (sequelize, Datatypes) => {
   return sequelize.define('user', {
       id: {
-        type: Datatypes.UUIDV4,
+        type: Datatypes.UUID,
         primaryKey: true
       },
       first_name: {
@@ -33,6 +33,12 @@ module.exports = (sequelize, Datatypes) => {
         allowNull: true,
         len: [7, 100],
         isEmail: true
+      },
+      permission_id: {
+        // fk in permission table
+        type: Datatypes.INTEGER,
+        required: true,
+        allowNull: false
       },
       updated_at: { type: Datatypes.DATE },
       deleted_at: { type: Datatypes.DATE }
