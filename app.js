@@ -20,11 +20,11 @@ const sessionStore = new MySQLStore(options);
 
 const app = express();
 
-app.use(express.static(`${__dirname}/client/build`));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(__dirname+'/client/build'));
 
 // session setup
 app.set('trust proxy', 1); // trust first proxy
@@ -80,7 +80,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.send('error');
 });
 
 module.exports = app;
