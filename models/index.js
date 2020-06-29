@@ -42,6 +42,15 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+//Associations
+
+//Permissions
+db.permission.hasMany(db.user)
+
+//Users
+db.user.belongsTo(db.permission);
+
+
 (async function () {
   try {
     await sequelize.authenticate();
