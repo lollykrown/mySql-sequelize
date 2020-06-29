@@ -24,14 +24,57 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(express.static(`${__dirname}/client/build`));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// session setup
+app.set('trust proxy', 1); // trust first proxy
+app.use(session({
+    secret: config.session_secret,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+    },
+}));
+
+// passport authentication
+app.use(passport.initialize());
+app.use(passport.session());
+
+// user identification
+app.use(require('./middleware/user_identification'));
+
+require('./API_Gateways/passport');
+app.use('/auth', require('./API_Gateways/Auth_Routes'));
+
+// Application Gateways
+app.use('/user', require('./API_Gateways/User_Gateway'));
+app.use('/course', require('./API_Gateways/Course_Gateway'));
+app.use('/content/', require('./API_Gateways/Content_Gateway'));
+
+// Logout Route
+app.get('/logout', (req, res) => {
+    sessionStore.destroy(req.sessionID, err => console.log(err));
+    req.logout();
+    req.session.destroy();
+    res.clearCookie('connect.sid');
+    return res.status(200).json({ message: 'User Logged Out' });
+});
+
+// this path MUST stay below other route handlers
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './client/build/index.html'));
+});
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+    next(createError(404));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
